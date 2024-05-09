@@ -1,23 +1,27 @@
 package repository.impl.toy;
 
+import annotations.Mysqlconn;
 import connection.DataBaseConnection;
 import exceptions.ServiceJdbcException;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import models.Toy;
 import repository.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static connection.DataBaseConnection.getConnection;
 //Aquí van los métodos en donde se usa SQL
+@ApplicationScoped
 public class ToyRepositoryJDBCImpl implements Repository<Toy> {
+    @Inject
+    @Mysqlconn
     private Connection conn;
 
     public ToyRepositoryJDBCImpl() {
         this.conn = conn;
-    }
-
-    private Connection getConnection() throws SQLException {
-        return DataBaseConnection.getInstance();
     }
     private Toy createToy(ResultSet resultSet) throws SQLException {
         Toy toy = new Toy();

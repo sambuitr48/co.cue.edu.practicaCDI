@@ -1,17 +1,24 @@
 package repository.impl.client;
 
+import annotations.Mysqlconn;
 import connection.DataBaseConnection;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import models.Client;
+import org.apache.commons.dbcp2.BasicDataSource;
 import repository.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static connection.DataBaseConnection.getConnection;
+
+@ApplicationScoped
 public class ClientRepositoryJDBCImpl implements Repository<Client> {
-    private Connection getConnection() throws SQLException{
-        return DataBaseConnection.getInstance();
-    }
+    @Inject
+    @Mysqlconn
+    private Connection conn;
     private Client createClient(ResultSet resultSet) throws SQLException {
         Client client = new Client();
         client.setClient_cedula(resultSet.getInt("client_cedula"));

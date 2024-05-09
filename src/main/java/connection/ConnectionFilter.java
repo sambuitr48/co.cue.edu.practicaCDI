@@ -1,5 +1,8 @@
 package connection;
 
+import annotations.Mysqlconn;
+import exceptions.ServiceJdbcException;
+import jakarta.inject.Inject;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,25 +13,29 @@ import java.sql.SQLException;
 
 @WebFilter("/*")
 public class ConnectionFilter implements Filter {
-
+    @Inject
+    @Mysqlconn
+    private Connection conn;
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        try (Connection conn = DataBaseConnection.getInstance()) {
-            if (conn.getAutoCommit()) {
-                conn.setAutoCommit(false);
+    public void doFilter(ServletRequest request, ServletResponse response,
+                         FilterChain chain) throws IOException, ServletException {
+        try {
+            Connection connRequest = this.conn;
+            if (connRequest.getAutoCommit()) {
+                connRequest.setAutoCommit(false);
             }
             try {
-                request.setAttribute("conn", conn);
+                request.setAttribute("conn", connRequest);
                 chain.doFilter(request, response);
-                conn.commit();
-            } catch (SQLException e) {
-                conn.rollback();
-                ((HttpServletResponse)response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                        e.getMessage());
+                connRequest.commit();
+            } catch (ServiceJdbcException e) {
+//connRequest.rollback();
+                ((HttpServletResponse)response).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
                 e.printStackTrace();
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
     }
+
 }

@@ -29,7 +29,7 @@ public class LoginSessionServlet extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         if (USERNAME.equals(username) && PASSWORD.equals(password)) {
-            String menssageRequest = (String) req.getAttribute("message");
+            String messageRequest = (String) req.getAttribute("message");
             String messageApp = (String) req.getServletContext().getAttribute("message");
             HttpSession session = req.getSession();
             session.getAttribute("username" /*username*/);

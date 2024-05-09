@@ -1,6 +1,8 @@
 package services.impl.toy;
 
 
+import annotations.Mysqlconn;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import mapping.dto.ClientDTO;
 import mapping.dto.ToyDTO;
@@ -15,9 +17,9 @@ import services.Service;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-
+@ApplicationScoped
 public class ToyServiceImpl implements Service {
-
+    @Inject
     private Repository<Toy> toyRepository;
     private Repository<Client> clientRepository;
     public ToyServiceImpl() {

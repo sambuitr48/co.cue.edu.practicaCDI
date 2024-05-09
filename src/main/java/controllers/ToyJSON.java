@@ -12,6 +12,8 @@ import services.impl.toy.ToyServiceImpl;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet(value = "/toy.json")
@@ -47,10 +49,27 @@ public class ToyJSON extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<ToyDTO> students = service.listToys();
+        resp.setContentType("text/html");
+        Connection conn = (Connection) req.getAttribute("conn");
+        ServletInputStream JsonStream = req.getInputStream();
         ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(students);
-        resp.setContentType("application/json");
-        resp.getWriter().write(json);
+        ToyDTO toyDTO = mapper.readValue(JsonStream,
+                ToyDTO.class);
+        int id = toyDTO.toy_id();
+        try {
+            service.search(id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        resp.setContentType("text/html");
+        PrintWriter out = resp.getWriter();
+        out.println("<html><body>");
+        out.println("<h1>Students</h1>");
+        try {
+            out.println(service.search(id));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        out.println("</body></html>");
     }
 }
