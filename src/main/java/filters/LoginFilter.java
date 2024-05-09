@@ -10,7 +10,7 @@ import services.impl.login.LoginServiceSessionImpl;
 import java.io.IOException;
 import java.util.Optional;
 
-@WebFilter({"*/private/*"})
+@WebFilter({"/private/*"})
 public class LoginFilter implements Filter {
 
     @Override

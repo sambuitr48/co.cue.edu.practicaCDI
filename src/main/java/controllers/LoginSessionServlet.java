@@ -18,7 +18,7 @@ import java.util.Optional;
 @WebServlet("/loginSession")
 public class LoginSessionServlet extends HttpServlet {
     @Inject
-    @Named("loginSession")
+    @Named("login")
     LoginService auth;
 
     final static String USERNAME = "admin";

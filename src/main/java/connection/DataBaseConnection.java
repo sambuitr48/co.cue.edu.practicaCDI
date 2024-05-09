@@ -6,9 +6,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class DataBaseConnection {
-    private static String url = "jdbc:mysql://localhost:3306/notas";
+    private static String url = "jdbc:mysql://localhost:3306/toy_shop";
     private static String user = "root";
-    private static String password = "admin";
+    private static String password = "";
     private static BasicDataSource pool;
     public static BasicDataSource getInstance() throws SQLException {
         if (pool == null) {

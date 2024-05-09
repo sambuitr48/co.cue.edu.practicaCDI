@@ -22,7 +22,7 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
 
-@WebServlet("/login")
+@WebServlet(value="/login")
 public class LoginServlet extends HttpServlet {
     final static String USERNAME = "admin";
     final static  String PASWORD = "12345";
